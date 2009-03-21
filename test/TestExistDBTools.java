@@ -1,6 +1,6 @@
 import junit.framework.*; 
 
-import com.netrii.starfruit.xmldb.ExistDBTools;
+import com.alexbleasdale.xramp.xmldb.ExistDBTools;
 
 
 public class TestExistDBTools extends TestCase {
