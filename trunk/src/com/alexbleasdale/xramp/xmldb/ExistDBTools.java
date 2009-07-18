@@ -11,6 +11,7 @@ import java.util.Date;
 
 import javax.xml.transform.OutputKeys;
 
+import org.apache.log4j.Logger;
 import org.exist.xmldb.DatabaseInstanceManager;
 import org.xmldb.api.DatabaseManager;
 import org.xmldb.api.base.Collection;
@@ -23,7 +24,7 @@ public class ExistDBTools {
 
 	// TODO - Refactor out username and password so they are retrieved from a
 	// config file
-
+	private final Logger LOG = Logger.getLogger(ExistDBTools.class);
 	public final static String BASE_URI = "xmldb:exist://";
 
 	public String currentCollection;
@@ -44,7 +45,7 @@ public class ExistDBTools {
 	 * @throws Exception
 	 */
 	public void startEmbeddedExist() throws Exception {
-		System.out.println("Starting embedded eXist instance");
+		LOG.info("Starting embedded eXist instance");
 		// initialize driver
 		Class cl = Class.forName("org.exist.xmldb.DatabaseImpl");
 		Database database = (Database) cl.newInstance();
@@ -53,7 +54,9 @@ public class ExistDBTools {
 	}
 
 	/**
-	 * Returns an integer value for the number of individual records in a given collection
+	 * Returns an integer value for the number of individual records in a given
+	 * collection
+	 * 
 	 * @return String
 	 * @throws Exception
 	 */
@@ -62,29 +65,29 @@ public class ExistDBTools {
 		String resources[] = col.listResources();
 		return resources.length;
 	}
-	
+
 	/**
-	 * Gets a list of the current stored resources
-	 * TODO - maybe return list as array.   
-	 * 	  
+	 * Gets a list of the current stored resources TODO - maybe return list as
+	 * array.
+	 * 
 	 * @throws Exception
 	 */
 	public void getResources() throws Exception {
 		System.out.println("ExistDBTools :: getResources - called at: "
 				+ new Date());
 		// TODO col = getCurrentCollection()
-		//Collection col = getRoot();
+		// Collection col = getRoot();
 		Collection col = getCollection(getCurrentCollection());
 		String resources[] = col.listResources();
 		System.out.println("Resources [" + resources.length + "]:");
-		 for (int i = 0; i < resources.length; i++) {
-		 System.out.println(resources[i]+"\t");
-		 }
+		for (int i = 0; i < resources.length; i++) {
+			System.out.println(resources[i] + "\t");
+		}
 	}
 
-	
 	/**
 	 * Creates a collection at the specified location
+	 * 
 	 * @param collection
 	 * @throws Exception
 	 */
@@ -136,48 +139,46 @@ public class ExistDBTools {
 			// TODO - throw error
 		}
 	}
-	
+
 	/**
 	 * Return a specified XML doc
 	 */
 	public String returnXMLDocAtIndex(int idx) throws Exception {
-		
+
 		Collection col = getCollection(this.currentCollection);
-		col.setProperty(OutputKeys.INDENT, "no"); 
+		col.setProperty(OutputKeys.INDENT, "no");
 		// TODO - this is hard coded - so unless the resource exists, error
 		// FIXME
-		XMLResource res = (XMLResource)col.getResource("accdd798.xml");  
-		         
-	if(res == null){  
-		System.out.println("document not found!");  
-	}else{  
-		System.out.println(res.getContent());   
-	}  	
+		XMLResource res = (XMLResource) col.getResource("accdd798.xml");
+
+		if (res == null) {
+			System.out.println("document not found!");
+		} else {
+			System.out.println(res.getContent());
+		}
 		// TODO serialise response as stream
 		return "res.getContent()";
 	}
 
-	
-	/** 
-	 * Return an XML doc by name 
+	/**
+	 * Return an XML doc by name
 	 * 
 	 */
 	public String getXMLDocByName(String name) throws Exception {
-		
+
 		Collection col = getCollection(this.currentCollection);
-		col.setProperty(OutputKeys.INDENT, "no");  
-		XMLResource res = (XMLResource)col.getResource(name);  
-		         
-	if(res == null){  
-		System.out.println("document not found!");  
-	}else{  
-		System.out.println(res.getContent());   
-	}  	
-	
-		
+		col.setProperty(OutputKeys.INDENT, "no");
+		XMLResource res = (XMLResource) col.getResource(name);
+
+		if (res == null) {
+			System.out.println("document not found!");
+		} else {
+			System.out.println(res.getContent());
+		}
+
 		return "fixme - return the string";
 	}
-	
+
 	/**
 	 * Hook to safely close the embedded eXist instance
 	 * 
@@ -202,7 +203,7 @@ public class ExistDBTools {
 	private Collection getRoot() throws XMLDBException {
 		setCurrentCollection("");
 		Collection col = DatabaseManager.getCollection(BASE_URI + "/db",
-				"admin", "password");
+				"admin", "admin");
 		return col;
 	}
 
@@ -215,12 +216,12 @@ public class ExistDBTools {
 	public Collection getCollection(String collectionName)
 			throws XMLDBException {
 		Collection col = DatabaseManager.getCollection(BASE_URI + "/db/"
-				+ collectionName, "admin", "password");
+				+ collectionName, "admin", "admin");
 		if (col != null) {
 			setCurrentCollection(collectionName);
-			System.out.println("Collection is now: " + col);
+			LOG.info("Collection is now: " + col);
 		} else {
-			System.out.println("Unable to get collection - getting root");
+			LOG.warn("Unable to get collection - getting root");
 			getRoot();
 		}
 		return col;
