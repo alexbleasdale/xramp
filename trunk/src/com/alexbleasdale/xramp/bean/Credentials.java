@@ -1,4 +1,4 @@
-package com.alexbleasdale.bean;
+package com.alexbleasdale.xramp.bean;
 
 /**
  * A standard set of credentials for accessing databases
