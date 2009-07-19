@@ -30,8 +30,8 @@ public class RetrieveExample {
         DatabaseManager.registerDatabase(database);
 
         // get the collection
-        //Collection col = DatabaseManager.getCollection(URI + args[0]);
-        Collection col = DatabaseManager.getCollection(URI + "/docs2");
+        Collection col = DatabaseManager.getCollection(URI + args[0]);
+       // Collection col = DatabaseManager.getCollection(URI + "/docs2");
         
         col.setProperty(OutputKeys.INDENT, "no");
         XMLResource res = (XMLResource)col.getResource(args[1]);

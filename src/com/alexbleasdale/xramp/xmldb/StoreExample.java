@@ -29,7 +29,7 @@ public class StoreExample {
         }
 
         String collection = args[0], file = args[1];
-       // String collection = "/db, file = /Users/alexbleasdale/Desktop/test.xml";
+       //String collection = "/db, file = /Users/alexbleasdale/Desktop/test.xml";
 
         // initialize driver
         String driver = "org.exist.xmldb.DatabaseImpl";
