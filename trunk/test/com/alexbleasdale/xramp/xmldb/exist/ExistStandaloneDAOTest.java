@@ -10,7 +10,7 @@ public class ExistStandaloneDAOTest {
 
 	@BeforeClass
 	public void setUp() throws Exception {
-		ExistStandaloneDAO esd = new ExistStandaloneDAO(TestConfig
+		ExistDAO esd = new ExistDAO(TestConfig
 				.getTestExistDbCredentials());
 	}
 
