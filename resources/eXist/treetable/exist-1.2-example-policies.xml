@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PolicySet xmlns="urn:oasis:names:tc:xacml:2.0:policy:schema:os" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" PolicySetId="eXist:1.2:PolicySet" xsi:schemaLocation="urn:oasis:names:tc:xacml:2.0:policy:schema:os http://docs.oasis-open.org/xacml/2.0/access_control-xacml-2.0-policy-schema-os.xsd" Version="1.0" PolicyCombiningAlgId="urn:oasis:names:tc:xacml:1.0:policy-combining-algorithm:permit-overrides">
+    <Description>These policies are a set of policy files that
+    Loren found in the old eXist 1.2 XACML source code.
+    We have not worked on upgrading any of them yet to work with the 1.4 system.
+    </Description>
+    <Policy PolicyId="BuiltInPolicy" RuleCombiningAlgId="urn:oasis:names:tc:xacml:1.0:rule-combining-algorithm:ordered-permit-overrides">
+        <Description>
+        This rule allows the core built-in library modules (identified by namespace URI) to be
+        imported by all users.  If an external library module has the same namespace URI, it
+        is not allowed.
+    </Description>
+        <Target>
+            <Resources>
+                <Resource>
+                    <ResourceMatch MatchId="urn:oasis:names:tc:xacml:1.0:function:anyURI-equal">
+                        <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#anyURI">http://www.w3.org/2003/05/xpath-functions</AttributeValue>
+                        <ResourceAttributeDesignator AttributeId="http://exist-db.org/xacml#module-namespace" DataType="http://www.w3.org/2001/XMLSchema#anyURI"/>
+                    </ResourceMatch>
+                </Resource>
+                <Resource>
+                    <ResourceMatch MatchId="urn:oasis:names:tc:xacml:1.0:function:anyURI-equal">
+                        <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#anyURI">http://exist-db.org/xquery/util</AttributeValue>
+                        <ResourceAttributeDesignator AttributeId="http://exist-db.org/xacml#module-namespace" DataType="http://www.w3.org/2001/XMLSchema#anyURI"/>
+                    </ResourceMatch>
+                </Resource>
+                <Resource>
+                    <ResourceMatch MatchId="urn:oasis:names:tc:xacml:1.0:function:anyURI-equal">
+                        <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#anyURI">http://exist-db.org/xquery/transform</AttributeValue>
+                        <ResourceAttributeDesignator AttributeId="http://exist-db.org/xacml#module-namespace" DataType="http://www.w3.org/2001/XMLSchema#anyURI"/>
+                    </ResourceMatch>
+                </Resource>
+                <Resource>
+                    <ResourceMatch MatchId="urn:oasis:names:tc:xacml:1.0:function:anyURI-equal">
+                        <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#anyURI">http://exist-db.org/xquery/request</AttributeValue>
+                        <ResourceAttributeDesignator AttributeId="http://exist-db.org/xacml#module-namespace" DataType="http://www.w3.org/2001/XMLSchema#anyURI"/>
+                    </ResourceMatch>
+                </Resource>
+                <Resource>
+                    <ResourceMatch MatchId="urn:oasis:names:tc:xacml:1.0:function:anyURI-equal">
+                        <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#anyURI">http://exist-db.org/xquery/xmldb</AttributeValue>
+                        <ResourceAttributeDesignator AttributeId="http://exist-db.org/xacml#module-namespace" DataType="http://www.w3.org/2001/XMLSchema#anyURI"/>
+                    </ResourceMatch>
+                </Resource>
+                <Resource>
+                    <ResourceMatch MatchId="urn:oasis:names:tc:xacml:1.0:function:anyURI-equal">
+                        <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#anyURI">http://exist-db.org/xquery/text</AttributeValue>
+                        <ResourceAttributeDesignator AttributeId="http://exist-db.org/xacml#module-namespace" DataType="http://www.w3.org/2001/XMLSchema#anyURI"/>
+                    </ResourceMatch>
+                </Resource>
+                <Resource>
+                    <ResourceMatch MatchId="urn:oasis:names:tc:xacml:1.0:function:anyURI-equal">
+                        <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#anyURI">http://exist-db.org/xquery/examples</AttributeValue>
+                        <ResourceAttributeDesignator AttributeId="http://exist-db.org/xacml#module-namespace" DataType="http://www.w3.org/2001/XMLSchema#anyURI"/>
+                    </ResourceMatch>
+                </Resource>
+                <Resource>
+                    <ResourceMatch MatchId="urn:oasis:names:tc:xacml:1.0:function:anyURI-equal">
+                        <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#anyURI">http://exist-db.org/xquery/validation</AttributeValue>
+                        <ResourceAttributeDesignator AttributeId="http://exist-db.org/xacml#module-namespace" DataType="http://www.w3.org/2001/XMLSchema#anyURI"/>
+                    </ResourceMatch>
+                </Resource>
+            </Resources>
+        </Target>
+        <Rule RuleId="AllowInternal" Effect="Permit">
+            <Target>
+                <Resources>
+                    <Resource>
+                        <ResourceMatch MatchId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
+                            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">internal library</AttributeValue>
+                            <ResourceAttributeDesignator AttributeId="http://exist-db.org/xacml#module-category" DataType="http://www.w3.org/2001/XMLSchema#string"/>
+                        </ResourceMatch>
+                    </Resource>
+                </Resources>
+            </Target>
+        </Rule>
+        <Rule RuleId="DenyAllOthers" Effect="Deny">
+            <Description>
+            This rule denies access to all other built-in modules.
+        </Description>
+        </Rule>
+    </Policy>
+    <Policy PolicyId="ExternalPolicy" RuleCombiningAlgId="urn:oasis:names:tc:xacml:1.0:rule-combining-algorithm:ordered-permit-overrides">
+        <Description>
+            A sample policy that applies to all external library modules.  It allows everything.
+        </Description>
+        <Target>
+            <Resources>
+                <Resource>
+                    <ResourceMatch MatchId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
+                        <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">external library</AttributeValue>
+                        <ResourceAttributeDesignator AttributeId="http://exist-db.org/xacml#module-category" DataType="http://www.w3.org/2001/XMLSchema#string"/>
+                    </ResourceMatch>
+                </Resource>
+            </Resources>
+        </Target>
+        
+        <!--<Rule RuleId="DenyAll" Effect="Deny">
+            <Description>
+            Deny all external modules.
+            </Description>
+            </Rule>-->
+        <Rule RuleId="PermitAll" Effect="Permit">
+            <Description>
+                Allow all external modules.
+            </Description>
+        </Rule>
+    </Policy>
+    <Policy PolicyId="ReflectionPolicy" RuleCombiningAlgId="urn:oasis:names:tc:xacml:1.0:rule-combining-algorithm:ordered-permit-overrides">
+        <Description>
+            This policy controls access to Java methods from XQuery.  It should
+            not change the operation of any of the samples.  It also should not
+            change the operation of the website either.
+        </Description>
+        <Target>
+            <Resources>
+                <Resource>
+                    <ResourceMatch MatchId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
+                        <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">method</AttributeValue>
+                        <ResourceAttributeDesignator AttributeId="http://exist-db.org/xacml/resource#resource-category" DataType="http://www.w3.org/2001/XMLSchema#string"/>
+                    </ResourceMatch>
+                    <ResourceMatch MatchId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
+                        <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">class</AttributeValue>
+                        <ResourceAttributeDesignator AttributeId="http://exist-db.org/xacml#source-type" DataType="http://www.w3.org/2001/XMLSchema#string"/>
+                    </ResourceMatch>
+                </Resource>
+            </Resources>
+        </Target>
+        <Rule RuleId="RandomAndMath" Effect="Permit">
+            <Description>
+                Allows any method in java.lang.Math or java.util.Random to be executed.
+            </Description>
+            <Target>
+                <Resources>
+                    <Resource>
+                        <ResourceMatch MatchId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
+                            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">java.lang.Math</AttributeValue>
+                            <ResourceAttributeDesignator AttributeId="http://exist-db.org/xacml#source-key" DataType="http://www.w3.org/2001/XMLSchema#string"/>
+                        </ResourceMatch>
+                    </Resource>
+                    <Resource>
+                        <ResourceMatch MatchId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
+                            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">java.util.Random</AttributeValue>
+                            <ResourceAttributeDesignator AttributeId="http://exist-db.org/xacml#source-key" DataType="http://www.w3.org/2001/XMLSchema#string"/>
+                        </ResourceMatch>
+                    </Resource>
+                </Resources>
+            </Target>
+        </Rule>
+        <Rule RuleId="File" Effect="Permit">
+            <Description>
+                Allows access to the constructor and the listFiles, getName, and isDirectory methods
+                of java.io.File
+            </Description>
+            <Target>
+                <Resources>
+                    <Resource>
+                        <ResourceMatch MatchId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
+                            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">java.lang.File</AttributeValue>
+                            <ResourceAttributeDesignator AttributeId="http://exist-db.org/xacml#source-key" DataType="http://www.w3.org/2001/XMLSchema#string"/>
+                        </ResourceMatch>
+                    </Resource>
+                </Resources>
+            </Target>
+            <Condition>
+                <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:any-of">
+                    <Function FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-equal"/>
+                    <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-one-and-only">
+                        <ResourceAttributeDesignator AttributeId="http://exist-db.org/xacml/resource#resource-id" DataType="http://www.w3.org/2001/XMLSchema#string"/>
+                    </Apply>
+                    <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-bag">
+                        <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">listFiles</AttributeValue>
+                        <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">getName</AttributeValue>
+                        <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">isDirectory</AttributeValue>
+                        <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">new</AttributeValue>
+                        <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">length</AttributeValue>
+                    </Apply>
+                </Apply>
+            </Condition>
+        </Rule>
+        <Rule RuleId="Collection" Effect="Permit">
+            <Description>
+                Allows access to the listResources, getName, listChildCollections, and
+                getChildCollection methods of org.xmldb.api.base.Collection
+            </Description>
+            <Target>
+                <Resources>
+                    <Resource>
+                        <ResourceMatch MatchId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
+                            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">org.xmldb.api.base.Collection</AttributeValue>
+                            <ResourceAttributeDesignator AttributeId="http://exist-db.org/xacml#source-key" DataType="http://www.w3.org/2001/XMLSchema#string"/>
+                        </ResourceMatch>
+                    </Resource>
+                </Resources>
+            </Target>
+            <Condition>
+                <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:and">
+                    <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
+                        <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-one-and-only">
+                            <ResourceAttributeDesignator AttributeId="urn:oasis:names:tc:xacml:1.0:resource:resource-id" DataType="http://www.w3.org/2001/XMLSchema#string"/>
+                        </Apply>
+                        <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">getService</AttributeValue>
+                    </Apply>
+                    <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:any-of">
+                        <Function FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-equal"/>
+                        <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">dba</AttributeValue>
+                        <SubjectAttributeDesignator AttributeId="http://exist-db.org/xacml/subject#group" DataType="http://www.w3.org/2001/XMLSchema#string"/>
+                    </Apply>
+                    <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:any-of">
+                        <Function FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-equal"/>
+                        <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-one-and-only">
+                            <ResourceAttributeDesignator AttributeId="urn:oasis:names:tc:xacml:1.0:resource:resource-id" DataType="http://www.w3.org/2001/XMLSchema#string"/>
+                        </Apply>
+                        <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-bag">
+                            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">listResources</AttributeValue>
+                            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">listChildCollections</AttributeValue>
+                            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">getName</AttributeValue>
+                            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">getChildCollection</AttributeValue>
+                        </Apply>
+                    </Apply>
+                </Apply>
+            </Condition>
+        </Rule>
+        <Rule RuleId="Runtime" Effect="Permit">
+            <Description>
+                Allows access to the getRuntime, maxMemory, totalMemory, and
+                freeMemory methods of java.lang.Runtime.
+                
+                Uncomment the Subjects tag to restrict access to administrators.
+            </Description>
+            <Target>
+                <!--<Subjects>
+                    <Subject>
+                    <SubjectMatch MatchId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
+                    <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">dba</AttributeValue>
+                    <SubjectAttributeDesignator AttributeId="http://exist-db.org/xacml/subject#group" DataType="http://www.w3.org/2001/XMLSchema#string"/>
+                    </SubjectMatch>
+                    </Subject>
+                    </Subjects>-->
+                <Resources>
+                    <Resource>
+                        <ResourceMatch MatchId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
+                            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">java.lang.Runtime</AttributeValue>
+                            <ResourceAttributeDesignator AttributeId="http://exist-db.org/xacml#source-key" DataType="http://www.w3.org/2001/XMLSchema#string"/>
+                        </ResourceMatch>
+                    </Resource>
+                </Resources>
+            </Target>
+            <Condition>
+                <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:any-of">
+                    <Function FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-equal"/>
+                    <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-one-and-only">
+                        <ResourceAttributeDesignator AttributeId="urn:oasis:names:tc:xacml:1.0:resource:resource-id" DataType="http://www.w3.org/2001/XMLSchema#string"/>
+                    </Apply>
+                    <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-bag">
+                        <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">getRuntime</AttributeValue>
+                        <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">maxMemory</AttributeValue>
+                        <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">totalMemory</AttributeValue>
+                        <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">freeMemory</AttributeValue>
+                    </Apply>
+                </Apply>
+            </Condition>
+        </Rule>
+        <Rule RuleId="DatabaseInstanceManager" Effect="Permit">
+            <Description>
+                Only allows database administrators access to the
+                org.exist.xmldb.DatabaseInstanceManager class.
+            </Description>
+            <Target>
+                <Subjects>
+                    <Subject>
+                        <SubjectMatch MatchId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
+                            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">dba</AttributeValue>
+                            <SubjectAttributeDesignator AttributeId="http://exist-db.org/xacml/subject#group" DataType="http://www.w3.org/2001/XMLSchema#string"/>
+                        </SubjectMatch>
+                    </Subject>
+                </Subjects>
+                <Resources>
+                    <Resource>
+                        <ResourceMatch MatchId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
+                            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">org.exist.xmldb.DatabaseInstanceManager</AttributeValue>
+                            <ResourceAttributeDesignator AttributeId="http://exist-db.org/xacml#source-key" DataType="http://www.w3.org/2001/XMLSchema#string"/>
+                        </ResourceMatch>
+                    </Resource>
+                </Resources>
+            </Target>
+        </Rule>
+        <Rule RuleId="DenyAllOthers" Effect="Deny">
+            <Description>
+                This rule denies access to all other Java classes and methods.
+            </Description>
+        </Rule>
+    </Policy>
+    <Policy PolicyId="ExternalLibraryPolicy" RuleCombiningAlgId="urn:oasis:names:tc:xacml:1.0:rule-combining-algorithm:ordered-permit-overrides">
+        <Description>
+            A sample policy that applies to all external library modules.  It allows everything.
+        </Description>
+        <Target>
+            <Resources>
+                <Resource>
+                    <ResourceMatch MatchId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
+                        <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">external library</AttributeValue>
+                        <ResourceAttributeDesignator AttributeId="http://exist-db.org/xacml#module-category" DataType="http://www.w3.org/2001/XMLSchema#string"/>
+                    </ResourceMatch>
+                </Resource>
+            </Resources>
+        </Target>
+        
+        <!--<Rule RuleId="DenyAll" Effect="Deny">
+            <Description>
+            Deny all external modules.
+            </Description>
+            </Rule>-->
+        <Rule RuleId="PermitAll" Effect="Permit">
+            <Description>
+                Allow all external modules.
+            </Description>
+        </Rule>
+    </Policy>
+</PolicySet>
