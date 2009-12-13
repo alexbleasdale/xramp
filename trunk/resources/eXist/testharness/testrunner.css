@@ -1,0 +1,19 @@
+.hide {
+    display:none;
+}
+.alt {
+    background: #e6f2ff;
+}
+.options {
+    background:#ddd;
+}
+#results a {
+    font-weight:bold;
+    color:black;
+}
+#results tfoot tr {display:none; font-weight:bold; background:#c3d9ff;}
+/*
+  #results tr {
+  background:#f1f1f1;
+  }
+ */
